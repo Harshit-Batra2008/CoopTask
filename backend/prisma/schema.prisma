@@ -1,10 +1,19 @@
-// TrustServe Prisma schema — Phase 0 foundation
+// TrustServe Prisma schema — Phase 1: conceptual data model
 //
-// INTENTIONALLY EMPTY OF MODELS.
-// No database tables are created in this phase.
-// Models (User, WorkerProfile, Service, Booking, Rating, Invoice,
-// DemandRecord, etc.) will be added and reviewed together in Phase 1,
-// per the approved development plan.
+// APPROVED SCOPE ONLY. This file defines the schema for review.
+// NOTE: No migration has been run against this file yet, and no
+// database connection has been made. `prisma migrate` must be run
+// explicitly and separately, only after approval.
+//
+// Design decisions (see Phase 1 proposal + approval for full reasoning):
+// - No separate Payment table — payment fields live on Invoice.
+// - No separate Skill catalog table — WorkerSkill.skillName is a plain
+//   string expected to match Service names by convention (enforced at
+//   the application layer, not the database).
+// - No separate worker-verification table — status lives directly on
+//   WorkerProfile.
+// - No booking status history table — Booking.status is a single
+//   current-state enum.
 
 generator client {
   provider = "prisma-client-js"
@@ -15,4 +24,169 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Models go here in Phase 1 — none yet.
+// ---------- ENUMS ----------
+
+enum Role {
+  CUSTOMER
+  WORKER
+  ADMIN
+}
+
+enum Language {
+  EN
+  HI
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum WelfareStatus {
+  COVERED
+  NOT_COVERED
+}
+
+enum BookingStatus {
+  REQUESTED
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+// ---------- MODELS ----------
+
+model User {
+  id                String   @id @default(uuid())
+  name              String
+  email             String   @unique
+  passwordHash      String
+  role              Role
+  preferredLanguage Language @default(EN)
+  createdAt         DateTime @default(now())
+
+  // A user is a worker only if a WorkerProfile exists for them.
+  workerProfile WorkerProfile?
+
+  // Bookings this user made as a customer.
+  bookingsAsCustomer Booking[] @relation("CustomerBookings")
+}
+
+model WorkerProfile {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id])
+  bio                String?
+  experienceYears    Int?
+  verificationStatus VerificationStatus @default(PENDING)
+  isAvailable        Boolean            @default(true)
+  area               String?
+  approxLatitude     Float?
+  approxLongitude    Float?
+  welfareStatus      WelfareStatus      @default(NOT_COVERED)
+  insuranceProvider  String?
+  createdAt          DateTime           @default(now())
+
+  skills         WorkerSkill[]
+  certifications Certification[]
+
+  // Bookings this worker has been assigned to.
+  bookingsAsWorker Booking[] @relation("WorkerBookings")
+}
+
+model WorkerSkill {
+  id              String        @id @default(uuid())
+  workerProfileId String
+  workerProfile   WorkerProfile @relation(fields: [workerProfileId], references: [id])
+
+  // Plain text, expected to match a Service.name (application-level
+  // convention, not a database foreign key — see Phase 1 decision).
+  skillName       String
+  experienceYears Int?
+}
+
+model Certification {
+  id                  String        @id @default(uuid())
+  workerProfileId     String
+  workerProfile       WorkerProfile @relation(fields: [workerProfileId], references: [id])
+  name                String
+  issuingOrganization String
+}
+
+model Service {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  category    String?
+  description String?
+
+  bookings      Booking[]
+  demandRecords DemandRecord[]
+}
+
+model Booking {
+  id String @id @default(uuid())
+
+  customerId String
+  customer   User   @relation("CustomerBookings", fields: [customerId], references: [id])
+
+  // Nullable — a booking may exist before a worker is matched/assigned.
+  workerId String?
+  worker   WorkerProfile? @relation("WorkerBookings", fields: [workerId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  locationArea String
+  latitude     Float
+  longitude    Float
+
+  scheduledDateTime DateTime
+  status            BookingStatus @default(REQUESTED)
+  isEmergency       Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+
+  rating  Rating?
+  invoice Invoice?
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  bookingId String   @unique
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  score     Int
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id        String  @id @default(uuid())
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  amount    Float
+
+  // Mocked payment flow — no real gateway, no separate Payment table.
+  paymentStatus PaymentStatus @default(PENDING)
+  paidAt        DateTime?
+
+  generatedAt DateTime @default(now())
+}
+
+model DemandRecord {
+  id           String   @id @default(uuid())
+  serviceId    String
+  service      Service  @relation(fields: [serviceId], references: [id])
+  area         String
+  date         DateTime
+  bookingCount Int
+
+  // Always seeded explicitly — no real historical pipeline exists yet.
+  isSynthetic Boolean @default(true)
+}
