@@ -1,0 +1,22 @@
+{
+  "name": "trustserve-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TrustServe Express API (Phase 0 foundation)",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "@prisma/client": "^5.19.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.19.1"
+  }
+}

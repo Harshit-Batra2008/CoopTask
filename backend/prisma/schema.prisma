@@ -1,0 +1,18 @@
+// TrustServe Prisma schema — Phase 0 foundation
+//
+// INTENTIONALLY EMPTY OF MODELS.
+// No database tables are created in this phase.
+// Models (User, WorkerProfile, Service, Booking, Rating, Invoice,
+// DemandRecord, etc.) will be added and reviewed together in Phase 1,
+// per the approved development plan.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models go here in Phase 1 — none yet.
