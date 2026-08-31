@@ -1,0 +1,67 @@
+/*
+  CoopTask global base styles.
+  Mobile-first: written for small screens by default, no media query
+  needed until desktop widening. Touch-friendly tap targets throughout.
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Ensure every interactive element meets a comfortable touch target */
+button,
+a.tap-target {
+  min-height: var(--touch-target-min);
+}
+
+/* Respect device safe areas (notches, home indicators) for fixed nav bars */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Simple utility for constraining content width on larger/desktop screens
+   while staying full-width on mobile — used by AppShell */
+.max-content-width {
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .max-content-width {
+    max-width: 720px;
+  }
+}

@@ -1,30 +1,24 @@
-import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import "./styles/tokens.css";
+import "./styles/global.css";
 
-// TrustServe frontend — Phase 0 foundation.
-// This component intentionally has NO business features yet.
-// Its only job is to prove the frontend can reach the backend API.
+import RoleSwitcher from "./dev/RoleSwitcher.jsx"; // DEV TOOL — see src/dev/
+import CustomerHome from "./pages/customer/CustomerHome.jsx";
+import WorkerHome from "./pages/worker/WorkerHome.jsx";
+import AdminHome from "./pages/admin/AdminHome.jsx";
 
-const BACKEND_URL = "http://localhost:4000";
-
+// Routing root for CoopTask.
+//
+// "/" is the temporary dev-only role switcher (see src/dev/RoleSwitcher.jsx)
+// standing in for login until real authentication exists. Everything
+// else here is a real (placeholder) product screen.
 export default function App() {
-  const [status, setStatus] = useState("checking...");
-
-  useEffect(() => {
-    fetch(`${BACKEND_URL}/api/health`)
-      .then((res) => res.json())
-      .then((data) => setStatus(`connected — backend says: "${data.status}" (${data.phase})`))
-      .catch(() => setStatus("could not reach backend — is it running on port 4000?"));
-  }, []);
-
   return (
-    <div style={{ fontFamily: "sans-serif", maxWidth: 600, margin: "60px auto", padding: 24 }}>
-      <h1>TrustServe</h1>
-      <p>SIH 2026 — Problem Statement 26089</p>
-      <p>Phase 0: Foundation scaffold.</p>
-      <hr />
-      <p>
-        <strong>Backend connection status:</strong> {status}
-      </p>
-    </div>
+    <Routes>
+      <Route path="/" element={<RoleSwitcher />} />
+      <Route path="/customer" element={<CustomerHome />} />
+      <Route path="/worker" element={<WorkerHome />} />
+      <Route path="/admin" element={<AdminHome />} />
+    </Routes>
   );
 }

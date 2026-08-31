@@ -1,9 +1,9 @@
 {
-  "name": "trustserve-backend",
-  "version": "0.1.0",
+  "name": "cooptask-backend",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "TrustServe Express API (Phase 0 foundation)",
+  "description": "CoopTask Express API — CodeCooperatives, SIH 2026 PS 26089",
   "main": "src/index.js",
   "scripts": {
     "dev": "node src/index.js",

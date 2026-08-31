@@ -1,0 +1,66 @@
+/*
+  CoopTask design tokens.
+  A single, small source of truth for the visual language — colors,
+  spacing, type scale, radii. No CSS framework — plain custom
+  properties, easy for a student to read and explain.
+*/
+
+:root {
+  /* Brand colors — cooperative green as primary, warm amber as accent */
+  --color-primary: #2f6f4e;
+  --color-primary-dark: #1f4d36;
+  --color-primary-soft: #e6f0ea;
+  --color-accent: #f2a93b;
+
+  /* Neutrals */
+  --color-bg: #f7f8f6;
+  --color-surface: #ffffff;
+  --color-text: #1a1f1c;
+  --color-text-muted: #6b7570;
+  --color-border: #e4e7e3;
+
+  /* Status colors — reused by StatusBadge for booking + verification states */
+  --color-success: #2f9e58;
+  --color-success-soft: #e5f5eb;
+  --color-warning: #d98a11;
+  --color-warning-soft: #fbf0dd;
+  --color-danger: #d64545;
+  --color-danger-soft: #fbe6e6;
+  --color-pending: #6b7570;
+  --color-pending-soft: #eceeec;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Type */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Layout constants */
+  --top-bar-height: 56px;
+  --bottom-nav-height: 64px;
+  --touch-target-min: 44px;
+}
