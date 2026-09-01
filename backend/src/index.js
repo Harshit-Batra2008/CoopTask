@@ -1,31 +1,56 @@
-// TrustServe backend — Phase 0 foundation
+// CoopTask backend entrypoint.
 //
-// This file intentionally contains NO business logic, NO authentication,
-// and NO database queries yet. Its only job right now is to prove that
-// the backend server runs and that the frontend can reach it.
+// Phase 3 adds: cookie parsing (for the httpOnly auth cookie),
+// credentialed CORS (so the frontend's cookie-based session works
+// across ports in local development), and the /api/auth/* routes.
+//
+// Still deliberately simple: one file wiring everything together, no
+// app factory pattern, no dependency injection framework — a student
+// can read this file top to bottom and understand the whole server.
 
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 
+// Fail fast and loudly if a required secret is missing, rather than
+// silently signing tokens with `undefined`.
+if (!process.env.JWT_SECRET) {
+  console.error(
+    "Missing JWT_SECRET in environment. Copy backend/.env.example to backend/.env and set a value."
+  );
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT || 4000;
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
 
-app.use(cors());
+app.use(
+  cors({
+    origin: FRONTEND_ORIGIN,
+    credentials: true, // required for the httpOnly auth cookie to be sent/received
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
-// Health check — used by the frontend to confirm frontend <-> backend
-// communication is working. Nothing more.
+// Health check — used by the frontend dev tool to confirm frontend
+// <-> backend communication is working. Nothing more.
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
-    service: "trustserve-backend",
-    phase: "0-foundation",
+    service: "cooptask-backend",
+    phase: "3-auth",
   });
 });
 
+app.use("/api/auth", authRoutes);
+
 app.listen(PORT, () => {
-  console.log(`TrustServe backend listening on http://localhost:${PORT}`);
+  console.log(`CoopTask backend listening on http://localhost:${PORT}`);
 });

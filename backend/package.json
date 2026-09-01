@@ -1,20 +1,27 @@
 {
   "name": "cooptask-backend",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "CoopTask Express API — CodeCooperatives, SIH 2026 PS 26089",
   "main": "src/index.js",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "dev": "node src/index.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "express": "^4.19.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "@prisma/client": "^5.19.1"
+    "@prisma/client": "^5.19.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cookie-parser": "^1.4.6"
   },
   "devDependencies": {
     "prisma": "^5.19.1"
