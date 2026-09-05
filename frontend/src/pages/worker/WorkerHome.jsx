@@ -1,6 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import AppShell from "../../components/layout/AppShell.jsx";
 import Card from "../../components/ui/Card.jsx";
-import StatusBadge from "../../components/ui/StatusBadge.jsx";
+import Button from "../../components/ui/Button.jsx";
 
 const NAV_ITEMS = [
   { to: "/worker", label: "Home", icon: "🏠" },
@@ -12,24 +13,21 @@ const NAV_ITEMS = [
 // Placeholder shell only — no worker profile or job-request data exists
 // yet (no backend routes for workers/bookings have been built).
 export default function WorkerHome() {
+  const navigate = useNavigate();
+
   return (
     <AppShell roleLabel="Worker" navItems={NAV_ITEMS}>
       <Card>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "var(--space-1)",
-          }}
-        >
-          <h1 style={{ fontSize: "var(--font-size-lg)" }}>Your profile</h1>
-          <StatusBadge label="Verification: not yet submitted" tone="pending" />
-        </div>
-        <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-sm)" }}>
-          Profile setup, skills, and certifications will be connected in a
-          later phase.
+        <h1 style={{ fontSize: "var(--font-size-lg)", marginBottom: "var(--space-1)" }}>
+          Your profile
+        </h1>
+        <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-sm)", marginBottom: "var(--space-3)" }}>
+          Manage your bio, skills, certifications, and see your current
+          verification status.
         </p>
+        <Button variant="primary" fullWidth onClick={() => navigate("/worker/profile")}>
+          View my profile
+        </Button>
       </Card>
 
       <Card>

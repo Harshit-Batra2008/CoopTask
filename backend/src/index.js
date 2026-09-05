@@ -14,6 +14,9 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.routes.js";
+import serviceRoutes from "./routes/service.routes.js";
+import workerRoutes from "./routes/worker.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 dotenv.config();
 
@@ -45,11 +48,14 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     service: "cooptask-backend",
-    phase: "3-auth",
+    phase: "4-service-catalog-worker-profile",
   });
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/workers", workerRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(PORT, () => {
   console.log(`CoopTask backend listening on http://localhost:${PORT}`);

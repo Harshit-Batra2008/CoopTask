@@ -8,8 +8,13 @@ import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import LoginScreen from "./pages/auth/LoginScreen.jsx";
 import RegisterScreen from "./pages/auth/RegisterScreen.jsx";
 import CustomerHome from "./pages/customer/CustomerHome.jsx";
+import CustomerServices from "./pages/customer/CustomerServices.jsx";
 import WorkerHome from "./pages/worker/WorkerHome.jsx";
+import WorkerProfileScreen from "./pages/worker/WorkerProfileScreen.jsx";
+import WorkerAvailabilityScreen from "./pages/worker/WorkerAvailabilityScreen.jsx";
 import AdminHome from "./pages/admin/AdminHome.jsx";
+import AdminServicesScreen from "./pages/admin/AdminServicesScreen.jsx";
+import AdminWorkersScreen from "./pages/admin/AdminWorkersScreen.jsx";
 
 const ROLE_HOME = {
   CUSTOMER: "/customer",
@@ -50,6 +55,15 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/customer/services"
+        element={
+          <ProtectedRoute allowedRole="CUSTOMER">
+            <CustomerServices />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/worker"
         element={
           <ProtectedRoute allowedRole="WORKER">
@@ -58,10 +72,43 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/worker/profile"
+        element={
+          <ProtectedRoute allowedRole="WORKER">
+            <WorkerProfileScreen />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/worker/availability"
+        element={
+          <ProtectedRoute allowedRole="WORKER">
+            <WorkerAvailabilityScreen />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin"
         element={
           <ProtectedRoute allowedRole="ADMIN">
             <AdminHome />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/services"
+        element={
+          <ProtectedRoute allowedRole="ADMIN">
+            <AdminServicesScreen />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/workers"
+        element={
+          <ProtectedRoute allowedRole="ADMIN">
+            <AdminWorkersScreen />
           </ProtectedRoute>
         }
       />

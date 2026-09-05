@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import AppShell from "../../components/layout/AppShell.jsx";
 import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
@@ -12,6 +13,8 @@ const NAV_ITEMS = [
 // Placeholder shell only — no booking data exists yet (no backend
 // routes for bookings/services have been built in this phase).
 export default function CustomerHome() {
+  const navigate = useNavigate();
+
   return (
     <AppShell roleLabel="Customer" navItems={NAV_ITEMS}>
       <Card>
@@ -35,9 +38,10 @@ export default function CustomerHome() {
             marginBottom: "var(--space-3)",
           }}
         >
-          Service browsing and booking will be connected in a later phase.
+          Booking isn't available yet, but you can see what the
+          cooperative currently offers.
         </p>
-        <Button variant="primary" fullWidth disabled>
+        <Button variant="primary" fullWidth onClick={() => navigate("/customer/services")}>
           Browse services
         </Button>
       </Card>
